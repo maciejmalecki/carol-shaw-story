@@ -15,6 +15,7 @@ BasicUpstart(start)
 start:
 
   jsr init
+  jsr initScreen
 
 loop:
   lda #$00
@@ -23,9 +24,39 @@ loop:
   sta $D020
   jmp loop
   
+  
 irqHandler: {
   rti
 }  
+
+initScreen: {
+  ldx #$00
+  loop:
+    lda screenData, x    
+    sta SCREEN, x
+    lda colorData, x
+    sta COLOR_RAM, x
+    
+    lda screenData + 256, x
+    sta SCREEN + 256, x
+    lda colorData + 256, x
+    sta COLOR_RAM + 256, x
+
+    lda screenData + 512, x
+    sta SCREEN + 512, x
+    lda colorData + 512, x
+    sta COLOR_RAM + 512, x
+
+    lda screenData + 768, x
+    sta SCREEN + 768, x
+    lda colorData + 768, x
+    sta COLOR_RAM + 768, x
+    
+    inx
+  bne loop
+  
+  rts
+} 
   
 init: {
   sei
