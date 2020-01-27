@@ -16,3 +16,7 @@ gradle-app.setting
 # Gradle Retro Asm Plugin
 /.ra/
 
+# KickAss
+*.prg
+*.sym
+
