@@ -44,6 +44,25 @@ irqHandler: {
     cmp RASTER
   beq busyWait
   
+  lda CONTROL_2
+  and #%11111000
+  ora #6
+  sta CONTROL_2
+  
+  lda CONTROL_2
+  and #%11111000
+
+  ldx #20
+  loop:
+    ldy RASTER
+    busyWait2:  
+      cpy RASTER
+    beq busyWait2
+    dex
+  bne loop
+  
+  sta CONTROL_2
+  
   pla
   tay
   pla
