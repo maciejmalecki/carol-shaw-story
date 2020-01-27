@@ -12,6 +12,8 @@
 .label RASTER = $D012     // raster counter
 .label IRR = $d019        // interrupt request register
 .label IMR = $d01a        // interrupt mask register
+.label TECH_TECH_WIDTH = 6*8
+
 
 
 
@@ -39,28 +41,29 @@ irqHandler: {
   tya
   pha
   
+  ldx #$00
   lda RASTER
   busyWait:
     cmp RASTER
   beq busyWait
   
-  lda CONTROL_2
-  and #%11111000
-  ora #6
-  sta CONTROL_2
-  
-  lda CONTROL_2
-  and #%11111000
-
-  ldx #20
   loop:
+    lda CONTROL_2
+    and #%11111000
+    ora techTechData, x
+    cmp #$FF
+    beq endTechTech
     ldy RASTER
-    busyWait2:  
-      cpy RASTER
-    beq busyWait2
-    dex
-  bne loop
-  
+    cmpAgain: cpy RASTER
+    beq cmpAgain
+    sta CONTROL_2
+    inx
+  jmp loop
+  endTechTech:
+          
+  lda CONTROL_2
+  and #%11111000
+  ora #0
   sta CONTROL_2
   
   pla
@@ -137,6 +140,8 @@ init: {
   cli        
   rts
 }
+
+techTechData:  .fill TECH_TECH_WIDTH, round(3.5 + 3.5*sin(toRadians(i*360/TECH_TECH_WIDTH))) ; .byte 0; .byte $FF
 
 screenData:
 .byte $20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20,$20
