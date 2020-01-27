@@ -7,6 +7,11 @@
 .label CIA2_ICR = $DD0D
 .label SCREEN = $0400
 .label COLOR_RAM = $D800
+.label CONTROL_1 = $D011  // vic control #1 register
+.label RASTER = $D012     // raster counter
+.label IRR = $d019        // interrupt request register
+.label IMR = $d01a        // interrupt mask register
+
 
 
 *=$0801 "Basic Upstart"
@@ -16,6 +21,7 @@ start:
 
   jsr init
   jsr initScreen
+  jsr installIrq
 
 loop:
   lda #$00
@@ -26,8 +32,22 @@ loop:
   
   
 irqHandler: {
+  dec IRR
   rti
 }  
+
+installIrq: {
+  sei             // disable interrupts
+  lda #$3c
+  sta RASTER      // set up requested raster line
+  lda CONTROL_1
+  and #%01111111
+  sta CONTROL_1   // 9th bit of raster line is 0
+  lda #$01
+  sta IMR         // vic will trigger interrupt on given raster line
+  cli             // enable interrupts
+  rts
+}
 
 initScreen: {
   ldx #$00
@@ -60,7 +80,7 @@ initScreen: {
   
 init: {
   sei
-  lda IO_REG
+  lda IO_REG        
   and #%11111000
   ora #%00000101
   sta IO_REG
