@@ -33,6 +33,12 @@ loop:
   
 irqHandler: {
   pha
+  
+  lda RASTER
+  busyWait:
+    cmp RASTER
+  beq busyWait
+  
   lda #$01
   sta $D021
   lda #$06
