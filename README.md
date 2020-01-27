@@ -1,6 +1,7 @@
 # carol-shaw-story
 ## Build status
 * master: [![CircleCI](https://circleci.com/gh/maciejmalecki/carol-shaw-story/tree/master.svg?style=svg)](https://circleci.com/gh/maciejmalecki/carol-shaw-story/tree/master)
+* live: [![CircleCI](https://circleci.com/gh/maciejmalecki/carol-shaw-story/tree/live.svg?style=svg)](https://circleci.com/gh/maciejmalecki/carol-shaw-story/tree/live)
 
 ## Useful links
 * Slides: https://maciejmalecki.github.io/it-archeology/index-cg.html
