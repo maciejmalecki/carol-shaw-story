@@ -8,6 +8,7 @@
 .label SCREEN = $0400
 .label COLOR_RAM = $D800
 .label CONTROL_1 = $D011  // vic control #1 register
+.label CONTROL_2 = $D016  // vic control #2 register
 .label RASTER = $D012     // raster counter
 .label IRR = $d019        // interrupt request register
 .label IMR = $d01a        // interrupt mask register
@@ -33,16 +34,20 @@ loop:
   
 irqHandler: {
   pha
+  txa
+  pha
+  tya
+  pha
   
   lda RASTER
   busyWait:
     cmp RASTER
   beq busyWait
   
-  lda #$01
-  sta $D021
-  lda #$06
-  sta $D021
+  pla
+  tay
+  pla
+  tax
   pla
   dec IRR
   rti
