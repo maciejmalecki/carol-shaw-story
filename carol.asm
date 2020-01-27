@@ -32,6 +32,12 @@ loop:
   
   
 irqHandler: {
+  pha
+  lda #$01
+  sta $D021
+  lda #$06
+  sta $D021
+  pla
   dec IRR
   rti
 }  
